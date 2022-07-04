@@ -26,7 +26,7 @@ export function Earth(props) {
 
   return (
     <>
-      <ambientLight intensity={0.15} />
+      <ambientLight intensity={0.5} />
       <pointLight color="#f6f3ea" position={[2, 0, 2]} intensity={1.2} />
       <Stars
         radius={300}
@@ -64,6 +64,10 @@ export function Earth(props) {
           rotateSpeed={0.4}
         />
       </mesh>
+      {/* <mesh>
+        <sphereBufferGeometry args={[1, 20, 20]} />
+        <meshBasicMaterial color="red" />
+      </mesh> */}
     </>
   );
 }
