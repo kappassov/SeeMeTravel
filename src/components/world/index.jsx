@@ -6,26 +6,26 @@ const World = () => {
   const [countries, setCountries] = useState({ features: [] });
   const [hoverD, setHoverD] = useState();
   const { country } = useContext(CountryContext);
-  const [selected, setSelected] = useState([]);
+  //const [selected, setSelected] = useState([]);
 
-  console.log(country);
+  console.log("world", country);
   useEffect(() => {
     // load data
     fetch("datasets/ne_110m_admin_0_countries.geojson")
       .then((res) => res.json())
       .then(setCountries);
     //console.log(countries);,
-    setSelected((prevCountries) => [country, ...prevCountries]);
   }, []);
 
   /*
 TODO:
-    1) CONTROLS TAB: 
-        add text field and list with countries to add to selectedCountries
+   
     2) Configure scrolling on page, maybe resize the globe when scrolling down/up
     3) add pictures to each country selection    
 */
-
+  //setSelected((prevCountries) => [country, ...prevCountries]);
+  const selected = [];
+  selected.push(country);
   return (
     <Globe
       globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
