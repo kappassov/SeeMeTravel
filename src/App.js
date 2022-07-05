@@ -6,15 +6,15 @@ import { useState, createContext, useContext } from "react";
 import { CountryContext } from "./context";
 
 function App() {
-  const [country, setCountry] = useState();
+  const [countries, setCountries] = useState([]); // []
 
   const handleChangeCountry = ({ value }) => {
     console.log("Appjs", value);
 
-    setCountry(value);
+    setCountries((prevState) => [...prevState, value]); // usa
   };
 
-  console.log("APPJS", country);
+  console.log("APPJS", countries);
   return (
     /*
 TODO:
@@ -26,7 +26,7 @@ TODO:
 
     // <>
     //
-    <CountryContext.Provider value={{ handleChangeCountry, country }}>
+    <CountryContext.Provider value={{ handleChangeCountry, countries }}>
       <World />
       <CountrySelector />
     </CountryContext.Provider>
