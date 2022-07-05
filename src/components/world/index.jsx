@@ -8,7 +8,7 @@ const World = () => {
   const { countries } = useContext(CountryContext);
   //const [selected, setSelected] = useState([]);
 
-  console.log("world", countries);
+  // console.log("world", countries);
   useEffect(() => {
     // load data
     fetch("datasets/ne_110m_admin_0_countries.geojson")
