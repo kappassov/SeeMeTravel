@@ -29,7 +29,7 @@ const World = () => {
   selected.push(countries);
 
   const byCountry = coords.byCountry();
-  console.log(byCountry.get("RU"));
+  //console.log(byCountry.get("RU"));
   // Gen lat lang for photos
   /*
       lat: 60,
@@ -47,7 +47,7 @@ const World = () => {
       };
     }),
   ];
-  console.log(gData[0]);
+  //console.log(gData[0]);
   const images = [
     // {
     //   title: "Travel 1",
@@ -82,7 +82,7 @@ const World = () => {
         htmlElementsData={gData[0]}
         htmlAltitude={0.13}
         htmlElement={(d) => {
-          console.log("htmlEl", d);
+          //console.log("htmlEl", d);
           const el = document.createElement("div");
           el.innerHTML = markerSvg;
           el.style.color = d.color;
@@ -92,14 +92,14 @@ const World = () => {
           el.style.cursor = "pointer";
           el.onclick = () => {
             setIsOpen(true);
-            console.log(isOpen);
+            //console.log(isOpen);
           };
           return el;
         }}
       />
       {isOpen && (
         <Lightbox
-          medium="https://placekitten.com/1500/500"
+          medium="https://placekitten.com/1500/3000"
           alt="Pic from this country"
           onClose={() => setIsOpen(false)}
         />

@@ -9,12 +9,12 @@ function App() {
   const [countries, setCountries] = useState([]); // []
 
   const handleChangeCountry = ({ value }) => {
-    console.log("Appjs", value);
+    //console.log("Appjs", value);
 
     setCountries((prevState) => [...prevState, value]); // usa
   };
 
-  console.log("APPJS", countries);
+  //console.log("APPJS", countries);
   return (
     /*
 TODO:
