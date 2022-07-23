@@ -1,90 +1,140 @@
-import React, { useState, useMemo, useContext } from "react";
+import React, { useState, useMemo, useContext, useEffect } from "react";
 import Select from "react-select";
 import countryList from "react-select-country-list";
 import { CountryContext } from "../../context";
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  listAll,
+  list,
+  getMetadata,
+} from "firebase/storage";
+import { collection, getDocs, addDoc, doc } from "firebase/firestore";
+import { storage, db } from "./firebase";
+import { v4 } from "uuid";
+import randomstring from "randomstring";
+import usedKeys from "../../keys.jsx";
 
 export const CountrySelector = () => {
   const [value, setValue] = useState("");
   const options = useMemo(() => countryList().getData(), []);
   const { handleChangeCountry } = useContext(CountryContext);
+  const { handleDeleteCountry } = useContext(CountryContext);
   const [countriesList, setCountriesList] = useState([]);
+  const [imageUpload, setImageUpload] = useState(null);
+  const [imageURLs, setImageURLs] = useState([]);
+  const [userId, setUserId] = useState();
+  const [visited, setVisited] = useState([]);
+
+  const colRef = collection(db, "users");
+
+  // const submitUser = () => {
+  //   const newArr = countriesList.map((el) => el.value);
+
+  //   console.log(newArr);
+  //   try {
+  //     colRef.doc(userId).set({
+  //       id: userId,
+  //       countries: newArr,
+  //       photos: imageURLs,
+  //     });
+  //   } catch (er) {
+  //     console.log(er);
+  //   }
+  // };
+
+  const uploadImage = (event, value) => {
+    event.preventDefault();
+    if (imageUpload == null) return;
+    const imageRef = ref(storage, `/${value}#${v4()}`);
+    uploadBytes(imageRef, imageUpload).then((image) => {
+      getDownloadURL(image.ref).then((url) => {
+        console.log("Uploaded successfully with url: ", url);
+        /*
+        imageURLs:
+                [
+                  {
+                    country: "KZ",
+                    url: "https://shithosting.org/12312"
+                  }
+                ]
+        */
+        const userObject = {
+          country: value,
+          url: url,
+        };
+        setImageURLs((prev) => [...prev, userObject]);
+      });
+      // getMetadata(image.ref).then((metadata) => {
+      //   console.log("metadata name: ", metadata.name);
+      // });
+    });
+  };
+
   const changeHandler = (value) => {
     setValue(value);
     handleChangeCountry(value);
-    //console.log(value);
     handleChangeCountryList(value);
-    console.log("list: ", countriesList);
   };
 
-  const handleChangeCountryList = ({ label }) => {
-    setCountriesList((prevState) => [...prevState, label]);
-  };
-
-  const [picture, setPicture] = useState({});
-
-  const uploadPicture = (e) => {
-    console.log(e.target.files);
-    setPicture({
-      /* contains the preview, if you want to show the picture to the user
-           you can access it with this.state.currentPicture
-       */
-      picturePreview: URL.createObjectURL(e.target.files[0]),
-      /* this contains the file we want to send */
-      pictureAsFile: e.target.files[0],
-    });
-    console.log("1", picture.picturePreview);
-    console.log("2", picture.pictureAsFile);
-  };
-
-  const toBase64 = (file) =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
-
-  const setImageAction = async (event) => {
-    event.preventDefault();
-
-    const formData = new FormData();
-    formData.append("file", picture.pictureAsFile);
-
-    const file64 = await toBase64(picture.pictureAsFile);
-    //console.log(picture.pictureAsFile);
-    const myKey = "6d207e02198a847aa98d0a2a901485a5";
-    const data = await fetch(
-      `https://freeimage.host/api/1/upload/?key=${myKey}&source=${picture.picturePreview}&format=json`,
-      {
-        method: "post",
-        //headers: { "Content-Type": "multipart/form-data" },
-        //body: formData,
-      }
+  const handleDeleteCountryList = (country) => {
+    const newCountries = countriesList.filter(
+      (el) => el.label !== country.label
     );
-
-    const uploadedImage = await data.json();
-    if (uploadedImage) {
-      console.log("Successfully uploaded image");
-      console.log(uploadedImage);
-    } else {
-      console.log("Error Found");
-    }
+    setCountriesList(newCountries);
+    handleDeleteCountry(country);
   };
+
+  const handleChangeCountryList = (country) => {
+    setCountriesList((prevState) => [...prevState, country]);
+  };
+
+  const generateUserId = () => {
+    const id = randomstring.generate({
+      length: 5,
+      readable: true,
+      charset: "alphanumeric",
+    });
+    // if (usedKeys.includes(id)) {
+    //   generateUserId();
+    // }
+    setUserId(id);
+    //usedKeys.append(id);
+  };
+
+  useEffect(() => {
+    generateUserId();
+  }, []);
 
   return (
     <>
       <Select options={options} value={value} onChange={changeHandler} />
       <ul>
         {countriesList.map((country) => (
-          <li key={country}>
-            <b> {country}</b>
-            <form onSubmit={setImageAction}>
-              <input type="file" onChange={uploadPicture} />
+          <li key={country.label}>
+            <b> {country.label}</b>
+            <form onSubmit={(event) => uploadImage(event, country.value)}>
+              <input
+                type="file"
+                onChange={(event) => {
+                  setImageUpload(event.target.files[0]);
+                }}
+              />
               <button type="submit"> Upload Photo</button>
+              <span
+                style={{ marginLeft: "20px", color: "red" }}
+                onClick={() => {
+                  handleDeleteCountryList(country);
+                }}
+              >
+                <b>X</b>
+              </span>
             </form>
           </li>
         ))}
       </ul>
+      {/* <button onClick={() => submitUser}>CREATE MY EARTH</button> */}
     </>
   );
 };

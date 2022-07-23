@@ -1,19 +1,17 @@
 import { useState, useEffect, useContext } from "react";
 import Globe from "react-globe.gl";
-import { CountryContext } from "../../context";
 import { markerSvg } from "../../assets/camera";
 import { Lightbox } from "react-modal-image-responsive";
-
-// create state for chosen country
-// ru , kz. fetch photo according to country code
-
+import { useParams } from "react-router-dom";
 const coords = require("country-coords");
-const World = () => {
+
+const UserWorld = () => {
   const [countriesJson, setCountriesJson] = useState({ features: [] });
-  //const id = generate();
-  const { countries } = useContext(CountryContext);
 
   const [isOpen, setIsOpen] = useState(false);
+
+  //FUNCTION TO GET ALL CHOSEN COUNTRIES with PHOTOS by unique ID from Database
+  const { id } = useParams();
 
   useEffect(() => {
     fetch("datasets/countries.geojson")
@@ -21,10 +19,7 @@ const World = () => {
       .then(setCountriesJson);
   }, []);
 
-  const selected = [];
-
-  selected.push(countries);
-
+  const selected = [["KZ", "GR", "CN", "FR"]];
   const byCountry = coords.byCountry();
 
   const gData = [
@@ -41,10 +36,6 @@ const World = () => {
   return (
     <>
       <Globe
-        rendererConfig={{
-          antialias: false,
-          powerPreference: "high-performance",
-        }}
         globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
         backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
         lineHoverPrecision={0}
@@ -60,6 +51,7 @@ const World = () => {
         polygonLabel={({ properties: d }) => `
           <b>${d.ADMIN} (${d.ISO_A2})</b>
         `}
+        //onPolygonHover={setHoverD}
         polygonsTransitionDuration={300}
         htmlElementsData={gData[0]}
         htmlAltitude={0.13}
@@ -73,8 +65,7 @@ const World = () => {
           el.style.cursor = "pointer";
           el.onclick = () => {
             setIsOpen(true);
-
-            // setCurrentCountry("RU"); //
+            //setCurrentCountry("RU"); //
           };
           return el;
         }}
@@ -89,4 +80,4 @@ const World = () => {
     </>
   );
 };
-export default World;
+export default UserWorld;
