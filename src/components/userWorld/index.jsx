@@ -1,30 +1,53 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import Globe from "react-globe.gl";
 import { markerSvg } from "../../assets/camera";
 import { Lightbox } from "react-modal-image-responsive";
 import { useParams } from "react-router-dom";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../controls/firebase";
 const coords = require("country-coords");
-
+const iso = require("iso-3166-1-alpha-2");
 const UserWorld = () => {
   const [countriesJson, setCountriesJson] = useState({ features: [] });
-
   const [isOpen, setIsOpen] = useState(false);
-
-  //FUNCTION TO GET ALL CHOSEN COUNTRIES with PHOTOS by unique ID from Database
+  const [selected, setSelected] = useState([]);
+  const [openedCountry, setOpenedCountry] = useState("");
+  const [mapImages, setMapImages] = useState();
   const { id } = useParams();
+  const docRef = doc(db, "users", id);
+  const urls = new Map();
 
-  useEffect(() => {
+  const getData = async () => {
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      setSelected(docSnap.data().countries);
+      docSnap.data().photos.forEach((obj) => {
+        urls.set(obj.country, obj.url);
+      });
+      setMapImages(urls);
+    } else {
+      console.log("No such document!");
+    }
+  };
+
+  const fetchCountries = () => {
     fetch("datasets/countries.geojson")
       .then((res) => res.json())
       .then(setCountriesJson);
+  };
+
+  useEffect(() => {
+    fetchCountries();
+    getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const selected = [["KZ", "GR", "CN", "FR"]];
   const byCountry = coords.byCountry();
 
   const gData = [
-    selected[0].map((country) => {
+    selected.map((country) => {
       return {
+        name: country,
         lat: byCountry.get(country).latitude,
         lng: byCountry.get(country).longitude,
         size: 20,
@@ -45,10 +68,10 @@ const UserWorld = () => {
         lineHoverPrecision={0}
         polygonsData={countriesJson.features}
         polygonAltitude={(d) =>
-          selected[0].includes(d.properties.ISO_A2) ? 0.12 : 0.01
+          selected.includes(d.properties.ISO_A2) ? 0.12 : 0.01
         }
         polygonCapColor={(d) =>
-          selected[0].includes(d.properties.ISO_A2) ? "green" : "gray"
+          selected.includes(d.properties.ISO_A2) ? "green" : "gray"
         }
         polygonSideColor={() => "rgba(0, 100, 0, 0.15)"}
         polygonStrokeColor={() => "#111"}
@@ -69,15 +92,16 @@ const UserWorld = () => {
           el.style.cursor = "pointer";
           el.onclick = () => {
             setIsOpen(true);
-            //setCurrentCountry("RU"); //
+            setOpenedCountry(d.name); //
+            //console.log(openedCountry);
           };
           return el;
         }}
       />
       {isOpen && (
         <Lightbox
-          medium="https://placekitten.com/1500/3000" // mybackend.com/{currentCounryCode}-${id}
-          alt="Pic from this country"
+          medium={`${mapImages.get(openedCountry)}`}
+          alt={`Photo from ${iso.getCountry(openedCountry)}`}
           onClose={() => setIsOpen(false)}
         />
       )}

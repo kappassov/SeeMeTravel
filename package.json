@@ -12,6 +12,7 @@
     "country-coords": "^1.0.0",
     "d3": "^7.5.0",
     "firebase": "^9.9.0",
+    "iso-3166-1-alpha-2": "^1.0.0",
     "latitude-longitude": "^1.1.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
