@@ -13,7 +13,7 @@ import {
 import { collection, getDocs, addDoc, doc } from "firebase/firestore";
 import { storage, db } from "./firebase";
 import { v4 } from "uuid";
-import randomstring from "randomstring";
+import random from "alphanumeric";
 import usedKeys from "../../keys.jsx";
 
 export const CountrySelector = () => {
@@ -29,20 +29,20 @@ export const CountrySelector = () => {
 
   const colRef = collection(db, "users");
 
-  // const submitUser = () => {
-  //   const newArr = countriesList.map((el) => el.value);
+  const submitUser = () => {
+    const newArr = countriesList.map((el) => el.value);
 
-  //   console.log(newArr);
-  //   try {
-  //     colRef.doc(userId).set({
-  //       id: userId,
-  //       countries: newArr,
-  //       photos: imageURLs,
-  //     });
-  //   } catch (er) {
-  //     console.log(er);
-  //   }
-  // };
+    console.log(newArr);
+    try {
+      colRef.doc(userId).set({
+        id: userId,
+        countries: newArr,
+        photos: imageURLs,
+      });
+    } catch (er) {
+      console.log(er);
+    }
+  };
 
   const uploadImage = (event, value) => {
     event.preventDefault();
@@ -83,6 +83,7 @@ export const CountrySelector = () => {
       (el) => el.label !== country.label
     );
     setCountriesList(newCountries);
+    setValue("");
     handleDeleteCountry(country);
   };
 
@@ -91,16 +92,8 @@ export const CountrySelector = () => {
   };
 
   const generateUserId = () => {
-    const id = randomstring.generate({
-      length: 5,
-      readable: true,
-      charset: "alphanumeric",
-    });
-    // if (usedKeys.includes(id)) {
-    //   generateUserId();
-    // }
+    const id = random(5);
     setUserId(id);
-    //usedKeys.append(id);
   };
 
   useEffect(() => {
@@ -134,7 +127,7 @@ export const CountrySelector = () => {
           </li>
         ))}
       </ul>
-      {/* <button onClick={() => submitUser}>CREATE MY EARTH</button> */}
+      <button onClick={() => submitUser}>CREATE MY EARTH</button>
     </>
   );
 };

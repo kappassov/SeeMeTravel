@@ -33,7 +33,7 @@ function App() {
             <>
               <TopSection />
               <Canvas>
-                <Suspense fallback={<>loading...</>}>
+                <Suspense fallback={null}>
                   <Earth />
                 </Suspense>
               </Canvas>

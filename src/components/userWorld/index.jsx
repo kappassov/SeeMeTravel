@@ -36,6 +36,10 @@ const UserWorld = () => {
   return (
     <>
       <Globe
+        rendererConfig={{
+          antialias: false,
+          powerPreference: "high-performance",
+        }}
         globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
         backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
         lineHoverPrecision={0}
