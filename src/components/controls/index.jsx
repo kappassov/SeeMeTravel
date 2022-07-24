@@ -10,7 +10,14 @@ import {
   list,
   getMetadata,
 } from "firebase/storage";
-import { collection, getDocs, addDoc, doc, setDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  addDoc,
+  doc,
+  setDoc,
+  Timestamp,
+} from "firebase/firestore";
 import { storage } from "./firebase";
 import { db } from "./firebase";
 import { v4 } from "uuid";
@@ -30,14 +37,15 @@ export const CountrySelector = () => {
 
   //const colRef = collection(db, "users");
 
-  const submitUser = () => {
+  const submitUser = async () => {
     const newArr = countriesList.map((el) => el.value);
     console.log("newArray: ", newArr);
     try {
-      setDoc(doc(db, "users", userId), {
+      await setDoc(doc(db, "users", userId), {
         id: userId,
         countries: newArr,
         photos: imageURLs,
+        date: Timestamp.fromDate(new Date()),
       });
       console.log("Created user instance successfully with ID ", userId);
     } catch (er) {
@@ -45,11 +53,11 @@ export const CountrySelector = () => {
     }
   };
 
-  const uploadImage = (event, value) => {
+  const uploadImage = async (event, value) => {
     event.preventDefault();
     if (imageUpload == null) return;
     const imageRef = ref(storage, `/${value}#${v4()}`);
-    uploadBytes(imageRef, imageUpload).then((image) => {
+    await uploadBytes(imageRef, imageUpload).then((image) => {
       getDownloadURL(image.ref).then((url) => {
         console.log("Uploaded successfully with url: ", url);
         /*
