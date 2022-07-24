@@ -10,8 +10,9 @@ import {
   list,
   getMetadata,
 } from "firebase/storage";
-import { collection, getDocs, addDoc, doc } from "firebase/firestore";
-import { storage, db } from "./firebase";
+import { collection, getDocs, addDoc, doc, setDoc } from "firebase/firestore";
+import { storage } from "./firebase";
+import { db } from "./firebase";
 import { v4 } from "uuid";
 import random from "alphanumeric";
 import usedKeys from "../../keys.jsx";
@@ -27,18 +28,18 @@ export const CountrySelector = () => {
   const [userId, setUserId] = useState();
   const [visited, setVisited] = useState([]);
 
-  const colRef = collection(db, "users");
+  //const colRef = collection(db, "users");
 
   const submitUser = () => {
     const newArr = countriesList.map((el) => el.value);
-
-    console.log(newArr);
+    console.log("newArray: ", newArr);
     try {
-      colRef.doc(userId).set({
+      setDoc(doc(db, "users", userId), {
         id: userId,
         countries: newArr,
         photos: imageURLs,
       });
+      console.log("Created user instance successfully with ID ", userId);
     } catch (er) {
       console.log(er);
     }
@@ -65,6 +66,7 @@ export const CountrySelector = () => {
           url: url,
         };
         setImageURLs((prev) => [...prev, userObject]);
+        console.log(imageURLs);
       });
       // getMetadata(image.ref).then((metadata) => {
       //   console.log("metadata name: ", metadata.name);
@@ -127,7 +129,7 @@ export const CountrySelector = () => {
           </li>
         ))}
       </ul>
-      <button onClick={() => submitUser}>CREATE MY EARTH</button>
+      <button onClick={() => submitUser()}>CREATE MY EARTH</button>
     </>
   );
 };
