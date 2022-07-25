@@ -4,13 +4,10 @@ import { CountryContext } from "../../context";
 import { markerSvg } from "../../assets/camera";
 import { Lightbox } from "react-modal-image-responsive";
 
-// create state for chosen country
-// ru , kz. fetch photo according to country code
-
 const coords = require("country-coords");
 const World = () => {
   const [countriesJson, setCountriesJson] = useState({ features: [] });
-  //const id = generate();
+
   const { countries } = useContext(CountryContext);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -81,7 +78,7 @@ const World = () => {
       />
       {isOpen && (
         <Lightbox
-          medium="https://placekitten.com/1500/3000" // mybackend.com/{currentCounryCode}-${id}
+          medium="https://placekitten.com/1500/3000"
           alt="Pic from this country"
           onClose={() => setIsOpen(false)}
         />

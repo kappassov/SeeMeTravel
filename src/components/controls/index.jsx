@@ -2,27 +2,12 @@ import React, { useState, useMemo, useContext, useEffect } from "react";
 import Select from "react-select";
 import countryList from "react-select-country-list";
 import { CountryContext } from "../../context";
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL,
-  listAll,
-  list,
-  getMetadata,
-} from "firebase/storage";
-import {
-  collection,
-  getDocs,
-  addDoc,
-  doc,
-  setDoc,
-  Timestamp,
-} from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getDoc, doc, setDoc, Timestamp } from "firebase/firestore";
 import { storage } from "./firebase";
 import { db } from "./firebase";
 import { v4 } from "uuid";
 import random from "alphanumeric";
-import usedKeys from "../../keys.jsx";
 
 export const CountrySelector = () => {
   const [value, setValue] = useState("");
@@ -33,9 +18,6 @@ export const CountrySelector = () => {
   const [imageUpload, setImageUpload] = useState(null);
   const [imageURLs, setImageURLs] = useState([]);
   const [userId, setUserId] = useState();
-  const [visited, setVisited] = useState([]);
-
-  //const colRef = collection(db, "users");
 
   const submitUser = async () => {
     const newArr = countriesList.map((el) => el.value);
@@ -60,15 +42,7 @@ export const CountrySelector = () => {
     await uploadBytes(imageRef, imageUpload).then((image) => {
       getDownloadURL(image.ref).then((url) => {
         console.log("Uploaded successfully with url: ", url);
-        /*
-        imageURLs:
-                [
-                  {
-                    country: "KZ",
-                    url: "https://shithosting.org/12312"
-                  }
-                ]
-        */
+
         const userObject = {
           country: value,
           url: url,
@@ -101,13 +75,19 @@ export const CountrySelector = () => {
     setCountriesList((prevState) => [...prevState, country]);
   };
 
-  const generateUserId = () => {
+  const generateUserId = async () => {
     const id = random(5);
-    setUserId(id);
+    const docSnap = await getDoc(doc(db, "users", id));
+    if (docSnap.exists()) {
+      generateUserId();
+    } else {
+      setUserId(id);
+    }
   };
 
   useEffect(() => {
     generateUserId();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
