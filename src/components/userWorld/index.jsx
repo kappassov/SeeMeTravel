@@ -1,12 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Globe from "react-globe.gl";
 import { markerSvg } from "../../assets/camera";
 import { Lightbox } from "react-modal-image-responsive";
 import { useParams } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../controls/firebase";
+import ConfettiGenerator from "confetti-js";
 const coords = require("country-coords");
 const iso = require("iso-3166-1-alpha-2");
+
 const UserWorld = () => {
   const [countriesJson, setCountriesJson] = useState({ features: [] });
   const [isOpen, setIsOpen] = useState(false);
@@ -16,6 +18,7 @@ const UserWorld = () => {
   const { id } = useParams();
   const docRef = doc(db, "users", id);
   const urls = new Map();
+  const byCountry = coords.byCountry();
 
   const getData = async () => {
     const docSnap = await getDoc(docRef);
@@ -36,13 +39,30 @@ const UserWorld = () => {
       .then(setCountriesJson);
   };
 
+  const handleConfetti = () => {
+    const confettiSettings = { target: "my-canvas" };
+    const confetti = new ConfettiGenerator(confettiSettings);
+    confetti.render();
+
+    confetti.clear();
+  };
+
+  // const globeRef = useRef();
+  // globeRef.current.pointOfView(
+  //   {
+  //     lat: byCountry.get("KZ".latitude),
+  //     lng: byCountry.get("KZ".longitude),
+  //     altitude: 2.5,
+  //   },
+  //   500
+  // );
   useEffect(() => {
     fetchCountries();
     getData();
+    //handleConfetti();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const byCountry = coords.byCountry();
 
   const gData = [
     selected.map((country) => {
@@ -56,9 +76,11 @@ const UserWorld = () => {
     }),
   ];
 
+  const handlePov = (data) => {};
   return (
     <>
       <Globe
+        // ref={globeRef}
         rendererConfig={{
           antialias: false,
           powerPreference: "high-performance",
