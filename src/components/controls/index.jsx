@@ -77,12 +77,13 @@ export const CountrySelector = () => {
 
   const generateUserId = async () => {
     const id = random(5);
-    const docSnap = await getDoc(doc(db, "users", id));
-    if (docSnap.exists()) {
-      generateUserId();
-    } else {
-      setUserId(id);
-    }
+    // const docSnap = await getDoc(doc(db, "users", id));
+    // if (docSnap.exists()) {
+    //   generateUserId();
+    // } else {
+    //   setUserId(id);
+    // }
+    setUserId(id);
   };
 
   useEffect(() => {
