@@ -5,9 +5,10 @@
 }
 .centerElements{
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
     flex-direction: column;
     align-items: center;
+    height: 100vh;
 }
 /* .globe{
     width: 100vw;

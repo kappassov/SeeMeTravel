@@ -22,6 +22,9 @@ const Logo = styled.h1`
   color: #fff;
   font-weight: 800;
   font-size: 80px;
+  @media screen and (max-width: 1080px) {
+    text-align: center;
+  }
 `;
 
 const Slogan = styled.h4`
@@ -30,6 +33,9 @@ const Slogan = styled.h4`
   font-weight: 700;
   font-size: 30px;
   margin-top: 10px;
+  @media screen and (max-width: 1080px) {
+    text-align: center;
+  }
 `;
 
 const Paragraph = styled.p`
@@ -41,6 +47,9 @@ const Paragraph = styled.p`
   font-weight: 500;
   max-width: 30%;
   text-align: center;
+  @media screen and (max-width: 1080px) {
+    max-width: 80%;
+  }
 `;
 
 const DonateButton = styled.button`
@@ -67,9 +76,12 @@ const MadeBy = styled.h3`
   color: #fff;
   position: fixed;
   margin: 0 2px;
-  bottom: 5px;
+  bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
+  @media screen and (max-width: 1080px) {
+    bottom: 80px;
+  }
 `;
 fontawesome.library.add(brands);
 export function TopSection() {
@@ -101,7 +113,7 @@ export function TopSection() {
           role="button"
           target="_blank"
         >
-          <i class="fab fa-linkedin-in"></i>
+          <i className="fab fa-linkedin-in"></i>
         </a>
       </MadeBy>
     </TopSectionContainer>
