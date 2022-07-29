@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome": "^1.1.8",
+    "@fortawesome/fontawesome-free-brands": "^5.0.13",
+    "@fortawesome/free-solid-svg-icons": "^6.1.2",
     "@react-three/drei": "^7.27.5",
     "@react-three/fiber": "^7.0.29",
     "@testing-library/jest-dom": "^5.16.4",
@@ -16,6 +19,7 @@
     "iso-3166-1-alpha-2": "^1.0.0",
     "latitude-longitude": "^1.1.1",
     "react": "^17.0.2",
+    "react-custom-scroll": "^4.4.0",
     "react-dom": "^17.0.2",
     "react-globe.gl": "^2.22.1",
     "react-modal-image-responsive": "^1.1.1",

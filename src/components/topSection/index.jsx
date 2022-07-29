@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import fontawesome from "@fortawesome/fontawesome";
+import brands from "@fortawesome/fontawesome-free-brands";
 const TopSectionContainer = styled.div`
   position: absolute;
   width: 100%;
@@ -34,7 +36,7 @@ const Paragraph = styled.p`
   margin: 0;
   margin-top: 3em;
   color: #fff;
-  font-size: 14px;
+  font-size: 18px;
   line-height: 1.5;
   font-weight: 500;
   max-width: 30%;
@@ -64,11 +66,12 @@ const DonateButton = styled.button`
 const MadeBy = styled.h3`
   color: #fff;
   position: fixed;
+  margin: 0 2px;
   bottom: 5px;
   left: 50%;
   transform: translateX(-50%);
 `;
-
+fontawesome.library.add(brands);
 export function TopSection() {
   const navigate = useNavigate();
   return (
@@ -81,9 +84,26 @@ export function TopSection() {
       </Paragraph>
       <DonateButton onClick={() => navigate("/create")}>Begin</DonateButton>
 
-      {/* <MadeBy>
-        <u>Made By:</u> Abay
-      </MadeBy> */}
+      <MadeBy>
+        <a
+          className="btn btn-primary"
+          style={{ backgroundColor: "#333333" }}
+          href="https://www.github.com/kappassov/earth3d"
+          role="button"
+          target="_blank"
+        >
+          <i className="fab fa-github"></i>
+        </a>
+        <a
+          className="btn btn-primary"
+          style={{ backgroundColor: "#0082ca" }}
+          href="https://www.linkedin.com/in/kappassov"
+          role="button"
+          target="_blank"
+        >
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </MadeBy>
     </TopSectionContainer>
   );
 }

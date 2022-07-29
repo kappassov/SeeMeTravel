@@ -9,6 +9,8 @@ import { db } from "./firebase";
 import { v4 } from "uuid";
 import random from "alphanumeric";
 
+import "./index.css";
+
 export const CountrySelector = () => {
   const [value, setValue] = useState("");
   const options = useMemo(() => countryList().getData(), []);
@@ -92,7 +94,7 @@ export const CountrySelector = () => {
   }, []);
 
   return (
-    <>
+    <div className="controls">
       <Select options={options} value={value} onChange={changeHandler} />
       <ul>
         {countriesList.map((country) => (
@@ -119,6 +121,6 @@ export const CountrySelector = () => {
         ))}
       </ul>
       <button onClick={() => submitUser()}>CREATE MY EARTH</button>
-    </>
+    </div>
   );
 };

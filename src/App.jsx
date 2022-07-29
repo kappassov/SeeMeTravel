@@ -47,7 +47,7 @@ function App() {
               value={{ handleChangeCountry, countries, handleDeleteCountry }}
             >
               <World />
-              <CountrySelector />
+              {/* <CountrySelector /> */}
             </CountryContext.Provider>
           }
         />
