@@ -151,9 +151,15 @@ const World = () => {
       <button
         onClick={ToggleSidebar}
         className="btn btn-primary"
-        style={{ position: "absolute", zIndex: "1" }}
+        style={{
+          position: "absolute",
+          zIndex: "1",
+          top: "45%",
+          minWidth: "70px",
+          marginLeft: "10px",
+        }}
       >
-        <i className="fa-solid fa-angles-left"></i>
+        <i className="fa-solid fa-angles-left fa-2x"></i>
       </button>
       <Globe
         className="globeGL"
