@@ -20,6 +20,9 @@ import { faUpload } from "@fortawesome/free-solid-svg-icons";
 
 import "../controls/index.css";
 
+import Popup from "reactjs-popup";
+import "reactjs-popup/dist/index.css";
+
 const coords = require("country-coords");
 const World = () => {
   const [countriesJson, setCountriesJson] = useState({ features: [] });
@@ -172,6 +175,52 @@ const World = () => {
   //////////////////////////////////////////////////////////////////
   return (
     <div className="globe">
+      <Popup
+        trigger={
+          <button
+            className="button"
+            style={{
+              position: "absolute",
+              zIndex: "1",
+            }}
+          >
+            Instructions
+          </button>
+        }
+        modal
+        nested
+      >
+        {(close) => (
+          <div className="modal1">
+            <button className="close1" onClick={close}>
+              &times;
+            </button>
+            <div className="header1"> Instructions: </div>
+            <div className="content1">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque, a
+              nostrum. Dolorem, repellat quidem ut, minima sint vel eveniet
+              quibusdam voluptates delectus doloremque, explicabo tempore dicta
+              adipisci fugit amet dignissimos?
+              <br />
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+              Consequatur sit commodi beatae optio voluptatum sed eius cumque,
+              delectus saepe repudiandae explicabo nemo nam libero ad,
+              doloribus, voluptas rem alias. Vitae?
+            </div>
+            <div className="actions1">
+              <button
+                className="button1"
+                onClick={() => {
+                  console.log("modal closed ");
+                  close();
+                }}
+              >
+                GOT IT
+              </button>
+            </div>
+          </div>
+        )}
+      </Popup>
       <button
         onClick={ToggleSidebar}
         className="btn btn-primary"
