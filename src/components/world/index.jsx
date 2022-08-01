@@ -38,11 +38,14 @@ const World = () => {
   const [imageUpload, setImageUpload] = useState(null);
   const [imageURLs, setImageURLs] = useState([]);
   const [userId, setUserId] = useState();
-  const [isUploaded, setIsUploaded] = useState(false);
+  const [isUploading, setIsUploaded] = useState(false);
   const navigate = useNavigate();
 
   fontawesome.library.add(brands);
   fontawesome.library.add(faUpload);
+
+  let uploadedImages = [];
+
   const submitUser = async () => {
     const newArr = countriesList.map((el) => el.value);
     console.log("newArray: ", newArr);
@@ -60,15 +63,19 @@ const World = () => {
     }
   };
 
-  const uploadImage = async (event, value) => {
-    setIsUploaded(false);
+  const uploadImage = async (event, value, file) => {
+    console.log(value);
+    uploadedImages[value] = false;
+    setIsUploaded(true);
     event.preventDefault();
-    if (imageUpload == null) return;
+    if (file == null) return;
     const imageRef = ref(storage, `/${value}#${v4()}`);
-    await uploadBytes(imageRef, imageUpload).then((image) => {
+
+    console.log(imageRef);
+    await uploadBytes(imageRef, file).then((image) => {
       getDownloadURL(image.ref).then((url) => {
         console.log("Uploaded successfully with url: ", url);
-        setIsUploaded(true);
+
         const userObject = {
           country: value,
           url: url,
@@ -77,9 +84,27 @@ const World = () => {
         console.log(imageURLs);
       });
       // getMetadata(image.ref).then((metadata) => {
-      //   console.log("metadata name: ", metadata.name);
-      // });
+      //   console.l
+
+      uploadedImages[value] = true;
+      const isUp = check(uploadedImages);
+      setIsUploaded(!isUp);
     });
+  };
+
+  const check = (uploadedImages) => {
+    for (let i in uploadedImages) {
+      if (!uploadedImages[i]) {
+        return false;
+      }
+    }
+    return true;
+    // const m = uploadedImages.map((item) => {
+    //   if (item.value == false) return false;
+    //   return true;
+    // });
+    // //[true,true]
+    // return m;
   };
 
   const changeHandler = (value) => {
@@ -105,12 +130,11 @@ const World = () => {
 
   const generateUserId = async () => {
     const id = random(5);
-    // const docSnap = await getDoc(doc(db, "users", id));
-    // if (docSnap.exists()) {
-    //   generateUserId();
-    // } else {
-    //   setUserId(id);
-    // }
+    const docSnap = await getDoc(doc(db, "users", id));
+    while (docSnap.exists()) {
+      id = random(5);
+      docSnap = await getDoc(doc(db, "users", id));
+    }
     setUserId(id);
   };
 
@@ -159,7 +183,7 @@ const World = () => {
           marginLeft: "10px",
         }}
       >
-        <i className="fa-solid fa-angles-left fa-2x"></i>
+        <i className="fa-solid fa-angles-right fa-2x"></i>
       </button>
       <Globe
         className="globeGL"
@@ -218,7 +242,7 @@ const World = () => {
         <div className="sd-header">
           <h4 className="mb-0">Earth Setup</h4>
           <div className="btn btn-primary" onClick={ToggleSidebar}>
-            <i className="fa-solid fa-angles-right"></i>
+            <i className="fa-solid fa-angles-left"></i>
           </div>
         </div>
 
@@ -242,25 +266,36 @@ const World = () => {
                     <a className="sd-link">
                       <b> {country.label}</b>
                       <form
+                        className="imgUploadForm"
                         onSubmit={(event) => uploadImage(event, country.value)}
                       >
                         <input
                           type="file"
+                          style={{ width: "200px" }}
                           onChange={(event) => {
-                            setImageUpload(event.target.files[0]);
+                            console.log(event.target.files);
+                            uploadImage(
+                              event,
+                              country.value,
+                              event.target.files[0]
+                            );
                           }}
                         />
 
-                        <button
+                        {/* <button
                           type="submit"
-                          className="btn btn-primary btn-floating"
+                          className="btn btn-outline-primary btn-floating"
+                          style={{ width: "200px" }}
                         >
                           <i className="fa-solid fa-cloud-arrow-up fa-sm"></i>
-                        </button>
+                        </button> */}
                         <button
                           type="submit"
-                          className="btn btn-primary btn-floating"
-                          style={{ marginLeft: "20px", backgroundColor: "red" }}
+                          className="btn btn-outline-danger btn-floating"
+                          style={{
+                            width: "80px",
+                            marginTop: "5px",
+                          }}
                           onClick={() => {
                             handleDeleteCountryList(country);
                           }}
@@ -272,12 +307,21 @@ const World = () => {
                   </li>
                 ))}
               </ul>
+
               <button
                 onClick={() => submitUser()}
                 className="btn btn-success"
-                style={{ width: "fit-content", fontWeight: "bold" }}
+                style={{
+                  width: "fit-content",
+                  fontWeight: "bold",
+                }}
+                disabled={isUploading}
               >
-                CREATE MY EARTH
+                {isUploading ? (
+                  <i class="fa-solid fa-spinner fa-spin-pulse"></i>
+                ) : (
+                  "CREATE MY EARTH"
+                )}
               </button>
             </div>
           </div>

@@ -1,7 +1,14 @@
 .controls{
     
     width:fit-content;
-    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.selectComponent{
+    margin-bottom: 10px;
+    width: 300px;
 }
 .centerElements{
     display: flex;
@@ -10,10 +17,12 @@
     align-items: center;
     height: 100vh;
 }
-/* .globe{
-    width: 100vw;
-    height: 100vh;
-} */
+.imgUploadForm{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
 .btn.btn-primary.btn-floating i{
     color: white;
 }
@@ -75,7 +84,7 @@
 }
 .sd-body ul li .sd-link{
     display: inline-block;
-    width: 100%;
+    width: 300px;
     padding: 10px 16px;
     color: #475f7b;
     background-color: #e5e8ec;
@@ -87,6 +96,4 @@
     justify-content: space-evenly;
     align-items: center;
 }
-.selectComponent{
-    width: 300px
-}
+

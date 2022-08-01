@@ -83,6 +83,7 @@ const UserWorld = () => {
         // ref={globeRef}
         rendererConfig={{
           antialias: false,
+          alpha: false,
           powerPreference: "high-performance",
         }}
         globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
