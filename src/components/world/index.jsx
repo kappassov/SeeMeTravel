@@ -41,7 +41,9 @@ const World = () => {
   const [imageUpload, setImageUpload] = useState(null);
   const [imageURLs, setImageURLs] = useState([]);
   const [userId, setUserId] = useState();
+  const [isOpenSide, setIsopenSide] = useState(false);
   const [isUploading, setIsUploaded] = useState(false);
+  const iso = require("iso-3166-1-alpha-2");
   const navigate = useNavigate();
 
   fontawesome.library.add(brands);
@@ -86,8 +88,6 @@ const World = () => {
         setImageURLs((prev) => [...prev, userObject]);
         console.log(imageURLs);
       });
-      // getMetadata(image.ref).then((metadata) => {
-      //   console.l
 
       uploadedImages[value] = true;
       const isUp = check(uploadedImages);
@@ -102,19 +102,19 @@ const World = () => {
       }
     }
     return true;
-    // const m = uploadedImages.map((item) => {
-    //   if (item.value == false) return false;
-    //   return true;
-    // });
-    // //[true,true]
-    // return m;
   };
 
   const changeHandler = (value) => {
-    console.log(value);
-    setValue(value);
-    handleChangeCountry(value);
-    handleChangeCountryList(value);
+    let flag = true;
+    countriesList.map((country) => {
+      if (country.value == value.value) flag = false;
+    });
+    if (flag) {
+      setValue(value);
+      handleChangeCountry(value);
+      handleChangeCountryList(value);
+    }
+
     //handleDuplicateCountry(value);
   };
 
@@ -167,7 +167,6 @@ const World = () => {
     }),
   ];
   //////////////////////////////////////////////////////////////////
-  const [isOpenSide, setIsopenSide] = useState(false);
 
   const ToggleSidebar = () => {
     isOpenSide === true ? setIsopenSide(false) : setIsopenSide(true);
@@ -178,13 +177,18 @@ const World = () => {
       <Popup
         trigger={
           <button
-            className="button"
+            className="btn btn-primary"
             style={{
               position: "absolute",
               zIndex: "1",
+              left: "calc(50% - 169.51px / 2 )",
+              marginTop: "10px",
+              color: "#e5e8ec",
+              backgroundColor: "#292d3e",
+              border: "none",
             }}
           >
-            Instructions
+            <b>how does it work ?</b>
           </button>
         }
         modal
@@ -192,30 +196,33 @@ const World = () => {
       >
         {(close) => (
           <div className="modal1">
-            <button className="close1" onClick={close}>
-              &times;
-            </button>
-            <div className="header1"> Instructions: </div>
+            <div className="header1">🌍 welcome, dear traveler </div>
             <div className="content1">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque, a
-              nostrum. Dolorem, repellat quidem ut, minima sint vel eveniet
-              quibusdam voluptates delectus doloremque, explicabo tempore dicta
-              adipisci fugit amet dignissimos?
+              🚀 <b>STEP 1 - </b> open side bar on your left and choose
+              countries that <b>you've traveled</b> so far 📄
+              <br />{" "}
+              <i style={{ marginLeft: "80px" }}>
+                you can pick'em <u>from the list</u> or by{" "}
+                <u>clicking on the Earth</u> itself
+              </i>
               <br />
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              Consequatur sit commodi beatae optio voluptatum sed eius cumque,
-              delectus saepe repudiandae explicabo nemo nam libero ad,
-              doloribus, voluptas rem alias. Vitae?
+              <br />
+              🚀 <b>STEP 2 - </b> upload your <b>photos</b> from{" "}
+              <b>these countries </b> by browsing them in your device 📱
+              <br />
+              <br />
+              🚀 <b>STEP 3 - </b> click <i>'Create My Earth'</i> and{" "}
+              <b>share URL</b> with your travel story to the Web 🕸️
+              <br />
             </div>
             <div className="actions1">
               <button
-                className="button1"
-                onClick={() => {
-                  console.log("modal closed ");
-                  close();
-                }}
+                type="button"
+                className="btn btn-primary"
+                style={{ backgroundColor: "#e5e8ec", color: "#292d3e " }}
+                onClick={() => close()}
               >
-                GOT IT
+                <b>got it !</b>
               </button>
             </div>
           </div>
@@ -227,9 +234,11 @@ const World = () => {
         style={{
           position: "absolute",
           zIndex: "1",
-          top: "45%",
+          top: "calc(50% - 46.4px / 2 )",
           minWidth: "70px",
           marginLeft: "10px",
+          backgroundColor: "#292d3e",
+          border: "none",
         }}
       >
         <i className="fa-solid fa-angles-right fa-2x"></i>
@@ -252,8 +261,16 @@ const World = () => {
           selected[0].includes(d.properties.ISO_A2) ? "green" : "gray"
         }
         onPolygonClick={(d) => {
-          selected.push(d.properties.ISO_A2);
-          console.log(d.properties.ISO_A2);
+          // if(countriesList){
+          //   return;
+          // }
+
+          const toCountryList = {
+            value: d.properties.ISO_A2,
+            label: iso.getCountry(d.properties.ISO_A2),
+          };
+          //console.log(toCountryList);
+          changeHandler(toCountryList);
         }}
         polygonSideColor={() => "rgba(0, 100, 0, 0.15)"}
         polygonStrokeColor={() => "#111"}
@@ -261,46 +278,49 @@ const World = () => {
           <b>${d.ADMIN} (${d.ISO_A2})</b>
         `}
         polygonsTransitionDuration={500}
-        htmlElementsData={gData[0]}
-        htmlAltitude={0.13}
-        htmlElement={(d) => {
-          const el = document.createElement("div");
-          el.innerHTML = markerSvg;
-          el.style.color = d.color;
-          el.style.width = `${d.size}px`;
+        // htmlElementsData={gData[0]}
+        // htmlAltitude={0.13}
+        // htmlElement={(d) => {
+        //   const el = document.createElement("div");
+        //   el.innerHTML = markerSvg;
+        //   el.style.color = d.color;
+        //   el.style.width = `${d.size}px`;
 
-          el.style["pointer-events"] = "auto";
-          el.style.cursor = "pointer";
-          el.onclick = () => {
-            setIsOpen(true);
-          };
-          return el;
-        }}
-        ref={globeEl}
+        //   el.style["pointer-events"] = "auto";
+        //   el.style.cursor = "pointer";
+        //   el.onclick = () => {
+        //     setIsOpen(true);
+        //   };
+        //   return el;
+        // }}
+        //ref={globeEl}
       />
 
-      {isOpen && (
+      {/* {isOpen && (
         <Lightbox
           medium="https://placekitten.com/1500/3000"
           alt="There will be pic from this country"
           onClose={() => setIsOpen(false)}
         />
-      )}
+      )} */}
 
       <div className={`sidebar ${isOpenSide == true ? "active" : ""}`}>
         <div className="sd-header">
           <h4 className="mb-0">Earth Setup</h4>
-          <div className="btn btn-primary" onClick={ToggleSidebar}>
+          <div
+            className="btn btn-primary"
+            style={{
+              backgroundColor: "#e5e8ec",
+              border: "none",
+              color: "#292d3e",
+            }}
+            onClick={ToggleSidebar}
+          >
             <i className="fa-solid fa-angles-left"></i>
           </div>
         </div>
 
         <div className="sd-body">
-          {/* <ul>
-            <li>
-              <a className="sd-link">Menu Item 8</a>
-            </li>
-          </ul> */}
           <div className="controls">
             <Select
               options={options}
@@ -330,14 +350,6 @@ const World = () => {
                             );
                           }}
                         />
-
-                        {/* <button
-                          type="submit"
-                          className="btn btn-outline-primary btn-floating"
-                          style={{ width: "200px" }}
-                        >
-                          <i className="fa-solid fa-cloud-arrow-up fa-sm"></i>
-                        </button> */}
                         <button
                           type="submit"
                           className="btn btn-outline-danger btn-floating"
@@ -363,11 +375,12 @@ const World = () => {
                 style={{
                   width: "fit-content",
                   fontWeight: "bold",
+                  color: "#e5e8ec",
                 }}
                 disabled={isUploading}
               >
                 {isUploading ? (
-                  <i class="fa-solid fa-spinner fa-spin-pulse"></i>
+                  <i className="fa-solid fa-spinner fa-spin-pulse"></i>
                 ) : (
                   "CREATE MY EARTH"
                 )}
