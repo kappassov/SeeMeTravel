@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import fontawesome from "@fortawesome/fontawesome";
 import brands from "@fortawesome/fontawesome-free-brands";
+
 const TopSectionContainer = styled.div`
   position: absolute;
   width: 100%;
@@ -35,6 +36,7 @@ const Slogan = styled.h4`
   margin-top: 10px;
   @media screen and (max-width: 1080px) {
     text-align: center;
+    margin-top: 30px;
   }
 `;
 
@@ -52,7 +54,7 @@ const Paragraph = styled.p`
   }
 `;
 
-const DonateButton = styled.button`
+const Button = styled.button`
   outline: none;
   border: none;
   background-color: #27b927;
@@ -79,8 +81,9 @@ const MadeBy = styled.h3`
   bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
+
   @media screen and (max-width: 1080px) {
-    bottom: 80px;
+    bottom: 40px;
   }
 `;
 fontawesome.library.add(brands);
@@ -94,27 +97,35 @@ export function TopSection() {
         “The world is a book and those who do not travel read only one page.” ~
         Saint Augustine.
       </Paragraph>
-      <DonateButton onClick={() => navigate("/create")}>Begin</DonateButton>
+      <Button onClick={() => navigate("/create")}>Begin</Button>
 
       <MadeBy>
-        <a
-          className="btn btn-primary"
-          style={{ backgroundColor: "#333333" }}
-          href="https://www.github.com/kappassov/earth3d"
-          role="button"
-          target="_blank"
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            maxWidth: "100%",
+          }}
         >
-          <i className="fab fa-github"></i>
-        </a>
-        <a
-          className="btn btn-primary"
-          style={{ backgroundColor: "#0082ca" }}
-          href="https://www.linkedin.com/in/kappassov"
-          role="button"
-          target="_blank"
-        >
-          <i className="fab fa-linkedin-in"></i>
-        </a>
+          <a
+            className="btn btn-primary"
+            style={{ backgroundColor: "#333333" }}
+            href="https://www.github.com/kappassov/earth3d"
+            role="button"
+            target="_blank"
+          >
+            <i className="fab fa-github"></i>
+          </a>
+          <a
+            className="btn btn-primary"
+            style={{ backgroundColor: "#0082ca" }}
+            href="https://www.linkedin.com/in/kappassov"
+            role="button"
+            target="_blank"
+          >
+            <i className="fab fa-linkedin-in"></i>
+          </a>
+        </div>
       </MadeBy>
     </TopSectionContainer>
   );

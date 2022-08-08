@@ -23,6 +23,21 @@ import "../controls/index.css";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 
+import { alpha, styled } from "@mui/material/styles";
+import InputBase from "@mui/material/InputBase";
+
+import Box from "@mui/material/Box";
+import Dialog from "@mui/material/Dialog";
+import {
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  DialogContentText,
+  Button,
+  Typography,
+  Divider,
+} from "@mui/material";
+
 const coords = require("country-coords");
 const World = () => {
   const [countriesJson, setCountriesJson] = useState({ features: [] });
@@ -46,6 +61,101 @@ const World = () => {
   const iso = require("iso-3166-1-alpha-2");
   const navigate = useNavigate();
 
+  const CustomButton = styled(Button)({
+    boxShadow: "none",
+    textTransform: "none",
+    fontSize: 16,
+    padding: "6px 12px",
+    marginBottom: "5px",
+    border: "1px solid",
+    lineHeight: 1.5,
+    backgroundColor: "#e5e8ec",
+    color: "#292d3e",
+    borderColor: "#292d3e",
+    fontFamily: ["Rubik"].join(","),
+    "&:hover": {
+      backgroundColor: "#e5e8ec",
+      borderColor: "#e5e8ec",
+      boxShadow: "none",
+    },
+    "&:active": {
+      boxShadow: "none",
+      backgroundColor: "#e5e8ec",
+      borderColor: "#292d3e",
+    },
+    "&:focus": {
+      boxShadow: "0 0 0 0.2rem rgba(0,123,255,.5)",
+    },
+  });
+
+  const CustomButtonSuccess = styled(Button)({
+    boxShadow: "none",
+    textTransform: "none",
+    fontSize: 16,
+    padding: "6px 12px",
+    lineHeight: 1.5,
+    backgroundColor: "#292d3e",
+    color: "#e5e8ec",
+    borderColor: "#292d3e",
+    fontFamily: ["Rubik"].join(","),
+    "&:hover": {
+      backgroundColor: "#292d3e",
+      borderColor: "#e5e8ec",
+      boxShadow: "none",
+      border: "1px solid",
+    },
+    "&:active": {
+      boxShadow: "none",
+      backgroundColor: "#e5e8ec",
+    },
+    "&:focus": {
+      boxShadow: "0 0 0 0.2rem rgba(0,123,255,.5)",
+    },
+  });
+
+  const LinkInput = styled(InputBase)(({ theme }) => ({
+    "label + &": {
+      marginTop: theme.spacing(3),
+    },
+    "& .MuiInputBase-input": {
+      borderRadius: 4,
+      position: "relative",
+      backgroundColor: "#292d3e",
+      color: "#e5e8ec",
+      border: "1px solid #ced4da",
+      fontSize: 15,
+      width: "180px",
+      padding: "10px 12px",
+      transition: theme.transitions.create([
+        "border-color",
+        "background-color",
+        "box-shadow",
+      ]),
+      fontFamily: ["Rubik"].join(","),
+      "&:focus": {
+        boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
+        borderColor: theme.palette.primary.main,
+      },
+    },
+  }));
+
+  const [helperDialogOpen, setHelperDialogOpen] = useState(true);
+  const handleHelperClose = () => {
+    setPage(1);
+    setHelperDialogOpen(false);
+  };
+
+  const [successDialogOpen, setSuccessDialogOpen] = useState(false);
+  const handleSuccessClose = (event, reason) => {
+    if (reason && reason == "backdropClick") return;
+    setSuccessDialogOpen(false);
+  };
+
+  const [page, setPage] = useState(1);
+  const handlePages = () => {
+    setPage(page + 1);
+  };
+
   fontawesome.library.add(brands);
   fontawesome.library.add(faUpload);
 
@@ -61,7 +171,8 @@ const World = () => {
         photos: imageURLs,
         date: Timestamp.fromDate(new Date()),
       });
-      await navigate(`/${userId}`);
+      await setSuccessDialogOpen(true);
+      //await navigate(`/${userId}`);
       console.log("Created user instance successfully with ID ", userId);
     } catch (er) {
       console.log(er);
@@ -174,7 +285,201 @@ const World = () => {
   //////////////////////////////////////////////////////////////////
   return (
     <div className="globe">
-      <Popup
+      <button
+        className="btn btn-primary"
+        style={{
+          position: "absolute",
+          zIndex: "1",
+          left: "calc(50% - 169.51px / 2 )",
+          marginTop: "10px",
+          color: "#e5e8ec",
+          backgroundColor: "#292d3e",
+          border: "none",
+        }}
+        onClick={() => setHelperDialogOpen(true)}
+      >
+        <b>how does it work ?</b>
+      </button>
+      <Dialog open={helperDialogOpen} onClose={handleHelperClose} maxWidth="md">
+        <Box
+          sx={{
+            m: "auto",
+            textAlign: "center",
+            backgroundColor: "#292d3e",
+            color: "#e5e8ec",
+            fontSize: "15px",
+          }}
+        >
+          <DialogTitle
+            sx={{
+              fontSize: "20px",
+              fontWeight: "bold",
+              fontFamily: "Rubik",
+            }}
+          >
+            welcome, dear traveler 🌍{" "}
+            {page === 1 ? "[1/3]" : page === 2 ? "[2/3]" : "[3/3]"}
+          </DialogTitle>
+
+          <Divider color="white" />
+
+          {page === 1 && (
+            <>
+              <DialogContent>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <img
+                    src="helper1.gif"
+                    width={250}
+                    height={250}
+                    style={{ marginTop: "5px", marginBottom: "15px" }}
+                  ></img>
+                  <Typography
+                    sx={{
+                      color: "e5e8ec",
+                      fontSize: "18px",
+                      fontFamily: "Rubik",
+                    }}
+                  >
+                    open side bar on your left and choose countries that{" "}
+                    <b>you've traveled</b> so far 📄 <br />
+                    <i>
+                      you can pick'em <u>from the list</u> or by{" "}
+                      <u>clicking on the Earth</u> itself
+                    </i>
+                  </Typography>
+                </Box>
+              </DialogContent>
+            </>
+          )}
+          {page === 2 && (
+            <>
+              <DialogContent>
+                <img
+                  src="helper2.gif"
+                  width={350}
+                  height={250}
+                  style={{ marginTop: "5px", marginBottom: "15px" }}
+                ></img>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color: "e5e8ec",
+                    fontSize: "18px",
+                    fontFamily: "Rubik",
+                  }}
+                >
+                  upload your <b>photos</b> from <b>these countries </b> by
+                  browsing them in your device 📱
+                </Typography>
+              </DialogContent>
+            </>
+          )}
+          {page === 3 && (
+            <>
+              <DialogContent>
+                <img
+                  src="helper3.gif"
+                  width={450}
+                  height={300}
+                  style={{ marginTop: "5px", marginBottom: "15px" }}
+                ></img>
+                <Typography
+                  variant="h6"
+                  sx={{ color: "e5e8ec", fontSize: "18px" }}
+                >
+                  click <i>'Create My Earth'</i> and <b>share URL</b> with your
+                  travel story to the Web 🕸️
+                </Typography>
+              </DialogContent>
+            </>
+          )}
+          <DialogActions sx={{ justifyContent: "center" }}>
+            {page === 3 ? (
+              <>
+                <CustomButton
+                  variant="contained"
+                  disableRipple
+                  onClick={handleHelperClose}
+                >
+                  got it!
+                </CustomButton>
+              </>
+            ) : (
+              <>
+                <CustomButton
+                  variant="contained"
+                  disableRipple
+                  onClick={handlePages}
+                >
+                  next
+                </CustomButton>
+              </>
+            )}
+          </DialogActions>
+        </Box>
+      </Dialog>
+
+      <Dialog
+        open={successDialogOpen}
+        onClose={handleSuccessClose}
+        maxWidth="md"
+      >
+        <Box
+          sx={{
+            m: "auto",
+            textAlign: "center",
+            backgroundColor: "#292d3e",
+            color: "#e5e8ec",
+            fontSize: "15px",
+          }}
+        >
+          <DialogTitle sx={{ fontFamily: "Rubik" }}>
+            Congratulations!
+          </DialogTitle>
+          <Divider color="white" />
+
+          <DialogContent>
+            <Typography
+              sx={{
+                color: "e5e8ec",
+                fontSize: "18px",
+                fontFamily: "Rubik",
+              }}
+            >
+              Now you can share your travel story with others 🎉
+            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                paddingTop: "20px",
+                paddingBottom: "10px",
+              }}
+            >
+              <LinkInput value={"smtrvl.vercel.app/" + userId} />
+            </Box>
+          </DialogContent>
+          <DialogActions sx={{ justifyContent: "center", mb: "20px" }}>
+            <CustomButton
+              variant="contained"
+              disableRipple
+              onClick={() => navigate(`/${userId}`)}
+            >
+              Let's see your Earth!
+            </CustomButton>
+          </DialogActions>
+        </Box>
+      </Dialog>
+
+      {/* <Popup
         trigger={
           <button
             className="btn btn-primary"
@@ -227,7 +532,7 @@ const World = () => {
             </div>
           </div>
         )}
-      </Popup>
+      </Popup> */}
       <button
         onClick={ToggleSidebar}
         className="btn btn-primary"

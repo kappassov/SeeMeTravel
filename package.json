@@ -3,9 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.10.0",
+    "@emotion/styled": "^11.10.0",
     "@fortawesome/fontawesome": "^1.1.8",
     "@fortawesome/fontawesome-free-brands": "^5.0.13",
     "@fortawesome/free-solid-svg-icons": "^6.1.2",
+    "@mui/material": "^5.9.3",
     "@react-three/drei": "^7.27.5",
     "@react-three/fiber": "^7.0.29",
     "@testing-library/jest-dom": "^5.16.4",
