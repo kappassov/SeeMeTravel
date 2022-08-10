@@ -15,7 +15,7 @@
   flex-direction: column;
   align-items: center;
   height: 100vh;
-  overflow-y: auto;
+  overflow-y: scroll;
 }
 .imgUploadForm {
   display: flex;
@@ -30,10 +30,10 @@
   background-color: black;
 }
 .sidebar {
-  width: 400px;
+  width: 390px;
   min-height: 100vh;
   box-shadow: 0px 4px 8px rgb(0 0 0 / 16%);
-  background-color: #fff;
+  background-color: #292d3e;
   position: fixed;
   top: 0;
   left: -100%;
@@ -68,7 +68,7 @@
 }
 .sd-body {
   padding: 15px;
-  max-height: calc(100vh - 65px);
+  max-height: 80vh;
   overflow: hidden;
   display: flex;
   justify-content: center;

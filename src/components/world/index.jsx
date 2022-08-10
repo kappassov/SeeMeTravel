@@ -363,7 +363,7 @@ const World = () => {
               <DialogContent>
                 <img
                   src="helper2.gif"
-                  width={350}
+                  width={320}
                   height={250}
                   style={{ marginTop: "5px", marginBottom: "15px" }}
                 ></img>
@@ -386,7 +386,7 @@ const World = () => {
               <DialogContent>
                 <img
                   src="helper3.gif"
-                  width={450}
+                  width={320}
                   height={300}
                   style={{ marginTop: "5px", marginBottom: "15px" }}
                 ></img>
