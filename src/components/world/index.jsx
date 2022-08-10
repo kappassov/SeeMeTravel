@@ -681,6 +681,8 @@ const World = () => {
                   width: "fit-content",
                   fontWeight: "bold",
                   color: "#e5e8ec",
+                  marginTop: "5px",
+                  marginBottom: "5px",
                 }}
                 disabled={isUploading}
               >
