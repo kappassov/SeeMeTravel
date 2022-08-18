@@ -1,8 +1,8 @@
 <div align="center">
-  <img alt="smt-logo" src="./public/smt-logo-readme.png" width="400" />
+  <img alt="smt-logo" src="./public/smt-logo-readme.png" width="200" />
 </div>
 <h1 align="center">
-  See Me Travel
+  🇰🇿 See Me Travel 🇰🇿
 </h1>
 <p align="center">
   Hosted with <a href="https://www.vercel.com/" target="_blank">Vercel</a>
@@ -10,7 +10,7 @@
 
 ![demo](./public/smt-main-page.png)
 
-## 🛠 Wanna run on your machine?
+## Want to run on your machine? 💻
 
 1. Clone the project
 
@@ -31,6 +31,6 @@
    npm start
    ```
 
-## Contributing
+## Contributing 💁🏽
 
 Feel free to reach me and suggest any improvements ;)
