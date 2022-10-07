@@ -18,14 +18,14 @@
    git clone https://github.com/kappassov/SeeMeTravel.git
    ```
 
-1. Install the dependencies
+2. Install the dependencies
 
    ```sh
    cd SeeMeTravel
    npm i
    ```
 
-1. Start the development server
+3. Start the development server
 
    ```sh
    npm start
