@@ -110,7 +110,7 @@ export function TopSection() {
           <a
             className="btn btn-primary"
             style={{ backgroundColor: "#333333" }}
-            href="https://www.github.com/kappassov/earth3d"
+            href="https://www.github.com/kappassov/SeeMeTravel"
             role="button"
             target="_blank"
           >
